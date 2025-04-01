@@ -1,0 +1,21 @@
+.sideBar{
+    height: 100vh;
+}
+.logo{
+    margin: 3px;
+    display: flex;
+    align-items: center;
+    color: #AA60C8;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.menu-vertical .active {
+    background-color: #FFDFEF !important;
+    color: #000 !important;
+    box-shadow: rgb(222, 221, 221) 0px 5px 15px;
+    border-radius: 5px;
+}
+.menu-vertical{
+    background-color: white !important;
+}

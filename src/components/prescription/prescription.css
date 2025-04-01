@@ -1,0 +1,72 @@
+.containerPresInput{
+    width: 95%;
+    margin: 1rem;
+    padding: 1rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 2rem;
+    height: 77vh;
+}
+.partApresc{
+    width: 60%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.partBpresc{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 10px;
+    gap: 20px;
+}
+.inputAndDesDiv{
+    display: flex;
+    justify-content: space-between;
+}
+.input{
+    width: 30vw;
+    border-radius: 5px;
+    border: 1px solid #7E7E7E;
+    outline: none;
+    text-transform: none;
+    padding-left: 5px;
+}
+.input:focus{
+    border: 2px solid #AA60C8;
+}
+.checkBoxMainDiv{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+.fileUploadDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18vh;
+    border-radius: 5px;
+    border-style:dashed;
+    border-spacing: 10px;
+    border-width: 2px;
+    border-color: rgb(124, 123, 123);
+}
+.btnsDivMain{
+    display: flex;
+    gap: 50px;
+}
+.dosageDropDiv{
+    width: 26vw;
+}
+.single-upload-button{
+    cursor: pointer;
+    border: 1px solid lightgray;
+    padding: 5px;
+    border-radius: 8px;
+}
+.checkbox{
+    padding: 5px;
+}

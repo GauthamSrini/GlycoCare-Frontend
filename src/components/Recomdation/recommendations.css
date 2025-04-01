@@ -1,0 +1,73 @@
+.DietChoiceMainDiv{
+    width: 95%;
+    margin: 1rem;
+    padding: 1rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 2rem;
+    height: 77vh;
+}
+.DietsTitle{
+    color: #AA60C8;
+    font-size: 20px;
+    font-weight:500
+}
+.dietChoicesDiv{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px;
+    margin-top: 20px;
+}
+.dietNameDiv{
+    display: flex;
+    padding: 5px 10px 5px 10px;
+    background-color: #faf0f5;
+    border-radius: 8px;
+    gap: 10px;
+    cursor: pointer;
+}
+.dietNameDivActive{
+    display: flex;
+    padding: 5px 10px 5px 10px;
+    background-color: #faf0f5;
+    border-radius: 8px;
+    gap: 10px;
+    border: 1px solid #AA60C8;
+    box-shadow: #dbe3f0 0px 8px 24px;
+    cursor: pointer;
+}
+.bookMark{
+    height: 15px;
+    margin-bottom: 10px;
+}
+.recommendedDiv{
+    margin-top: 30px;
+}
+.recommendationTit{
+    font-weight: 500;
+}
+.foodRecommendTitle{
+    margin-top: 10px;
+    color: #AA60C8;
+    font-weight: 600;
+}
+.foodRecommendationDes{
+    display: flex;
+    margin: 20px;
+    gap: 40px;
+}
+.subtit{
+    color: #AA60C8;
+    font-weight: 500;
+}
+.preparationsDivFood{
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    gap: 20px;
+}
+.food_img{
+    box-shadow: #AA60C8 0px 8px 20px;
+}
