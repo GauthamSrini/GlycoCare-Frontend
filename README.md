@@ -30,6 +30,6 @@ Glycocare is a personalized health and diet solution for diabetic patients. This
 3. Start the development server:
    ```sh
    npm run dev
-4. Open http://localhost:5173 in your browser.
+4. Open http://localhost:5173 in your browser here the app will be running.
 
 
