@@ -90,7 +90,7 @@ const Prescription = () => {
         console.log(formData);
 
         const response = await axios.post(
-          'http://localhost:5000/api/eldertech/prescription/create',
+          'http://localhost:5000/api/glycoCare/prescription/create',
           formData,
           {
             headers: {

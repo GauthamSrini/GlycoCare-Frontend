@@ -121,7 +121,7 @@ const Dashboard = () => {
   const fetchMedicineChoices = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/eldertech/prescription/getAll"
+        "http://localhost:5000/api/glycoCare/prescription/getAll"
       );
       setMedicineData(response.data);
     } catch (err) {
@@ -131,7 +131,7 @@ const Dashboard = () => {
 
   const fetchDietaryChoices = async () =>{
     try{
-    const response = await axios.get('http://localhost:5000/api/eldertech/dietaryChoices')
+    const response = await axios.get('http://localhost:5000/api/glycoCare/dietaryChoices')
         setFoodItemsData(response.data)
     }
     catch(err){

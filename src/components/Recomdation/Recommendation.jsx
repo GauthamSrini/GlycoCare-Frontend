@@ -18,7 +18,7 @@ const Recommendation = () => {
 
   const fetchDietaryChoices = async () =>{
     try{
-    const response = await axios.get('http://localhost:5000/api/eldertech/dietaryChoices')
+    const response = await axios.get('http://localhost:5000/api/glycoCare/dietaryChoices')
         setFoodItemsData(response.data)
         setSelectedFoodItem(response.data[0])
         console.log(response.data);

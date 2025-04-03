@@ -30,7 +30,7 @@ const Login = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/eldertech/validateUser?username=${username}&password=${password}`
+        `http://localhost:5000/api/glycoCare/validateUser?username=${username}&password=${password}`
       );
       if (response.status === 200 && response.data.name) {
         toast.success(`Welcome ${response.data.name}!`, {

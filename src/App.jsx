@@ -6,7 +6,7 @@ import Prescription from './components/prescription/Prescription'
 import Recommendation from './components/Recomdation/Recommendation'
 import { Route, Routes } from 'react-router-dom'
 import Chatbot from './components/chatbot/Chatbot'
-import Login from './components/login/login'
+import Login from './components/login/Login'
 import { useLocation } from 'react-router-dom'
 
 function App() {
