@@ -20,7 +20,7 @@ const Prescription = () => {
   const [beforeFood, setBeforeFood] = useState(0);
   const [afterFood, setAfterFood] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const days = [
     { id: 1, day: "Sun" },
@@ -66,13 +66,17 @@ const Prescription = () => {
         !medicalName ||
         !reason ||
         !disease ||
-        (!morning && !afternoon && !night)||
+        (!morning && !afternoon && !night) ||
         !dosage ||
         (!beforeFood && !afterFood) ||
         !selectedFile ||
-        selectedDays.length===0
+        selectedDays.length === 0
       ) {
-        alert("Fill out all the Fields");
+        toast.warn("Fill out all the fields", {
+          className: "custom-toast",
+          bodyClassName: "custom-toast-body",
+          progressClassName: "custom-toast-progress",
+        });
       } else {
         const formData = new FormData();
         formData.append("name", medicalName);
@@ -90,7 +94,7 @@ const Prescription = () => {
         console.log(formData);
 
         const response = await axios.post(
-          'http://localhost:5000/api/glycoCare/prescription/create',
+          "http://localhost:5000/api/glycoCare/prescription/create",
           formData,
           {
             headers: {
@@ -106,17 +110,17 @@ const Prescription = () => {
             className: "custom-toast",
             bodyClassName: "custom-toast-body",
             progressClassName: "custom-toast-progress",
-            onClose: () => navigate("/"), 
+            onClose: () => navigate("/"),
           });
         }
       }
     } catch (error) {
-        console.error("Error sending data to the backend:", error);
-        toast.warn("Error while Creating Prescription", {
-          className: "custom-toast",
-          bodyClassName: "custom-toast-body",
-          progressClassName: "custom-toast-progress",
-        });
+      console.error("Error sending data to the backend:", error);
+      toast.warn("Error while Creating Prescription", {
+        className: "custom-toast",
+        bodyClassName: "custom-toast-body",
+        progressClassName: "custom-toast-progress",
+      });
     }
   };
 
@@ -140,7 +144,7 @@ const Prescription = () => {
           <div className="partApresc">
             {/* Medication Name */}
             <div className="inputAndDesDiv">
-              <div>Medication Name</div>
+              <div className="formInpTit">Medication Name</div>
               <div>
                 <input
                   className="input"
@@ -153,7 +157,7 @@ const Prescription = () => {
             </div>
             {/* Reason for Medication */}
             <div className="inputAndDesDiv">
-              <div>Reason For Medication</div>
+              <div className="formInpTit">Reason For Medication</div>
               <div>
                 <textarea
                   className="input"
@@ -165,7 +169,7 @@ const Prescription = () => {
             </div>
             {/* Name of Disease */}
             <div className="inputAndDesDiv">
-              <div>Name of Disease</div>
+              <div className="formInpTit">Name of Disease</div>
               <div>
                 <textarea
                   className="input"
@@ -177,7 +181,7 @@ const Prescription = () => {
             </div>
             {/* Schedule Timings */}
             <div className="inputAndDesDiv">
-              <div>Schedule Timings</div>
+              <div className="formInpTit">Schedule Timings</div>
               <div style={{ display: "flex", gap: "30px" }}>
                 {days.map((day) => (
                   <div
@@ -185,7 +189,7 @@ const Prescription = () => {
                     onClick={() => handleDayClick(day.id)}
                     style={{
                       cursor: "pointer",
-                      color: selectedDays.includes(day.id) ? "white" : "black",
+                      color: selectedDays.includes(day.id) ? "white" : "rgb(92, 91, 91)",
                       border: selectedDays.includes(day.id)
                         ? "1px solid #AA60C8"
                         : "1px solid lightgray",
@@ -207,40 +211,31 @@ const Prescription = () => {
           <div className="partBpresc">
             {/* Intake Time */}
             <div>
-              <div>Intake Time</div>
+              <div className="formInpTit">Intake Time</div>
               <div className="checkBoxMainDiv">
-                <div>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    checked={morning === 1}
-                    onChange={() => handleCheckboxChange(setMorning, morning)}
-                  />{" "}
+                <div
+                  className={morning ? "inputSubTitDivSelect" : "inputSubTitDivDeSelect"}
+                  onClick={() => handleCheckboxChange(setMorning, morning)}
+                >
                   Morning
                 </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    checked={afternoon === 1}
-                    onChange={() => handleCheckboxChange(setAfternoon, afternoon)}
-                  />{" "}
+                <div
+                  className={afternoon ? "inputSubTitDivSelect" : "inputSubTitDivDeSelect"}
+                  onClick={() => handleCheckboxChange(setAfternoon, afternoon)}
+                >
                   Afternoon
                 </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    checked={night === 1}
-                    onChange={() => handleCheckboxChange(setNight, night)}
-                  />{" "}
+                <div
+                  className={night ? "inputSubTitDivSelect" : "inputSubTitDivDeSelect"}
+                  onClick={() => handleCheckboxChange(setNight, night)}
+                >
                   Night
                 </div>
               </div>
             </div>
             {/* Dosage */}
             <div className="inputAndDesDiv">
-              <div>Dosage</div>
+              <div className="formInpTit">Dosage</div>
               <div>
                 <Select
                   className="dosageDropDiv"
@@ -257,32 +252,24 @@ const Prescription = () => {
             </div>
             {/* Food */}
             <div>
-              <div>Food</div>
+              <div className="formInpTit">Period of Intake</div>
               <div className="checkBoxMainDiv">
-                <div>
-                  <input
-                    type="radio"
-                    checked={beforeFood === 1}
-                    onChange={() =>
-                      handleRadioChange(setBeforeFood, setAfterFood)
-                    }
-                  />{" "}
-                  Before
+                <div
+                  className={beforeFood ? "inputSubTitDivSelect" : "inputSubTitDivDeSelect"}
+                  onClick={() => handleRadioChange(setBeforeFood, setAfterFood)}
+                >
+                  Before Food
                 </div>
-                <div>
-                  <input
-                    type="radio"
-                    checked={afterFood === 1}
-                    onChange={() =>
-                      handleRadioChange(setAfterFood, setBeforeFood)
-                    }
-                  />{" "}
-                  After
+                <div
+                  className={afterFood ? "inputSubTitDivSelect" : "inputSubTitDivDeSelect"}
+                  onClick={() => handleRadioChange(setAfterFood, setBeforeFood)}
+                >
+                  After Food
                 </div>
               </div>
             </div>
             {/* Upload Prescription */}
-            <div>Upload your prescription for further details</div>
+            <div className="formInpTit">Prescription Upload</div>
             <div className="fileUploadDiv">
               {!selectedFile && (
                 <label htmlFor="presc-upload" className="single-upload-button">
@@ -306,23 +293,12 @@ const Prescription = () => {
             {/* Buttons */}
             <div className="btnsDivMain">
               <div>
-                <Button
-                  variant="contained"
-                  color="error"
-                  sx={{ textTransform: "none" }}
-                >
-                  Cancel
-                </Button>
+                <button className="cancelBtn">Cancel</button>
               </div>
               <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ textTransform: "none" }}
-                  onClick={handleSubmit}
-                >
+                <button className="saveBtn" onClick={handleSubmit}>
                   Save
-                </Button>
+                </button>
               </div>
             </div>
           </div>
