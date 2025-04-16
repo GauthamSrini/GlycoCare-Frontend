@@ -1,5 +1,46 @@
 .chatBotMainContainer{
     height: 70vh;
     margin: 50px;
+    margin-top: 10px;
+    margin-left: 30px;
     position: relative;
 }
+.chatTit{
+    margin-left: 30px;
+    margin-top: 20px;
+    background-color: white;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #dddbdb;
+    border-radius: 8px;
+    color: #AA60C8;
+    font-weight: 500;
+}
+  
+  .cs-message-input__content-editor-wrapper {
+    margin-top: 10px;
+    border: 1px solid #73cae4;
+    background-color: white;
+    color: white; /* input text color */
+  }
+  
+  .cs-message-input__content-editor {
+    background-color: white;
+    color: black; 
+  }
+  
+  .cs-message-input__content-editor::placeholder {
+    color: #888; /* placeholder text color */
+  }
+
+
+  .cs-message-input__content-button {
+    background-color: #00796b !important;
+    color: white !important;
+    border-radius: 8px;
+  }
+  
+  .cs-message-input__content-button:hover {
+    background-color: #004d40 !important;
+  }
+  

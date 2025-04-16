@@ -14,7 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 // Register the required modules
 ChartJS.register(
@@ -30,8 +30,28 @@ ChartJS.register(
 const Dashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [medicineData, setMedicineData] = useState([]);
-  const [foodItemsData,setFoodItemsData] = useState([])
-  const navigate = useNavigate()
+  const [foodItemsData, setFoodItemsData] = useState([]);
+  const [heartModal, setHeartModal] = useState(false);
+  const [sugarModal, setSugarModal] = useState(false);
+  const [sugarLevels, setSugarLevels] = useState([
+    {
+      week_1: 0,
+      week_2: 0,
+      week_3: 0,
+      week_4: 0,
+    },
+  ]);
+  const [heartRates, setHeartRates] = useState([
+    {
+      week_1: 0,
+      week_2: 0,
+      week_3: 0,
+      week_4: 0,
+    },
+  ]);
+  const [pointColors, setPointColors] = useState([]);
+  const [pointCheart, setPointCheart] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -42,7 +62,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchMedicineChoices();
-    fetchDietaryChoices()
+    fetchDietaryChoices();
+    fetchSugarLevels();
+    fetchHeartRates();
   }, []);
 
   const days = [
@@ -71,10 +93,19 @@ const Dashboard = () => {
     datasets: [
       {
         label: "Sugar Level",
-        data: [110,90,100,120],
+        data: [
+          sugarLevels[0].week_1,
+          sugarLevels[0].week_2,
+          sugarLevels[0].week_3,
+          sugarLevels[0].week_4,
+        ],
         fill: false,
         borderColor: "#AA60C8",
         tension: 0.1,
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors,
+        pointRadius: 4, // You can increase/decrease size
+        pointHoverRadius: 6,
       },
     ],
   };
@@ -84,11 +115,20 @@ const Dashboard = () => {
     labels: ["Week1", "Week2", "Week3", "Week4"],
     datasets: [
       {
-        label: "Heart Rate",
-        data: [115,100,110,80],
+        label: "Heart Rates",
+        data: [
+          heartRates[0].week_1,
+          heartRates[0].week_2,
+          heartRates[0].week_3,
+          heartRates[0].week_4,
+        ],
         fill: false,
         borderColor: "#AA60C8",
         tension: 0.1,
+        pointBackgroundColor: pointCheart,
+        pointBorderColor: pointCheart,
+        pointRadius: 4, // You can increase/decrease size
+        pointHoverRadius: 6,
       },
     ],
   };
@@ -129,15 +169,50 @@ const Dashboard = () => {
     }
   };
 
-  const fetchDietaryChoices = async () =>{
-    try{
-    const response = await axios.get('http://localhost:5000/api/glycoCare/dietaryChoices')
-        setFoodItemsData(response.data)
+  const fetchDietaryChoices = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/glycoCare/dietaryChoices"
+      );
+      setFoodItemsData(response.data);
+    } catch (err) {
+      console.log("error fetching the diatary choices", err);
     }
-    catch(err){
-        console.log("error fetching the diatary choices",err);
+  };
+
+  const fetchSugarLevels = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/glycoCare/getSugarLevels?user_id=1`
+      );
+      setSugarLevels(response.data);
+      const temp = Object.values(response.data[0]);
+      const temp_color = temp.map((value) =>
+        value <= 100 ? "#40DC82" : "#FF0A00"
+      );
+      setPointColors(temp_color);
+      console.log(temp_color);
+    } catch (err) {
+      console.log("Error fethcing sugar levels", err);
     }
-  }
+  };
+
+  const fetchHeartRates = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/glycoCare/getHeartRates?user_id=1`
+      );
+      setHeartRates(response.data);
+      const temp = Object.values(response.data[0]);
+      const temp_color = temp.map((value) =>
+        value <= 150 ? "#40DC82" : "#FF0A00"
+      );
+      setPointCheart(temp_color);
+      console.log(temp_color);
+    } catch (err) {
+      console.log("Error while fetching the heart rates", err);
+    }
+  };
 
   return (
     <div className="dashMainDiv">
@@ -166,9 +241,14 @@ const Dashboard = () => {
                     marginLeft: "10px",
                   }}
                 >
-                  Indication
+                  Description
                 </div>
-                <div className="plusIcon">+</div>
+                <div
+                  className="plusIcon"
+                  onClick={() => setSugarModal(!sugarModal)}
+                >
+                  {!sugarModal ? "+" : "←"}
+                </div>
               </div>
             </div>
             <div
@@ -181,51 +261,61 @@ const Dashboard = () => {
               <div className="sugarGrapthDiv">
                 <Line data={data} options={options} />
               </div>
-              <div className="IndicationsDiv">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "15px",
-                  }}
-                >
-                  <CircleIcon style={{ height: "17px", color: "#40DC82" }} />
-                  Normal Level{" "}
-                  <CircleIcon
+              {!sugarModal ? (
+                <div className="IndicationsDiv">
+                  <div
                     style={{
-                      height: "17px",
-                      marginLeft: "25px",
-                      color: "#FF0A00",
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "15px",
                     }}
-                  />
-                  High Level
+                  >
+                    <CircleIcon style={{ height: "17px", color: "#40DC82" }} />
+                    Normal Level{" "}
+                    <CircleIcon
+                      style={{
+                        height: "17px",
+                        marginLeft: "25px",
+                        color: "#FF0A00",
+                      }}
+                    />
+                    High Level
+                  </div>
+                  <div className="staticSugarTit">Blood Sugar Level Ranges</div>
+                  <div>
+                    <table className="tableDatasugars">
+                      <tr>
+                        <th>Age</th>
+                        <th>Fasting Range</th>
+                        <th>Postprandial Range</th>
+                      </tr>
+                      <tr>
+                        <td>19–40 years</td>
+                        <td>70–99 mg/dL</td>
+                        <td>less 140 mg/dL</td>
+                      </tr>
+                      <tr>
+                        <td>41–60 years</td>
+                        <td>70–100 mg/dL</td>
+                        <td>Less 140 mg/dL</td>
+                      </tr>
+                      <tr>
+                        <td>61 and older</td>
+                        <td>70–110 mg/dL</td>
+                        <td>Less 150 mg/dL</td>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
-                <div className="staticSugarTit">Sugar Level Ranges</div>
+              ) : (
                 <div>
-                  <table className="tableDatasugars">
-                    <tr>
-                      <th>Age</th>
-                      <th>Systolic Range</th>
-                      <th>Diastolic Range</th>
-                    </tr>
-                    <tr>
-                      <td>19–40 years</td>
-                      <td>95–135</td>
-                      <td>60–80</td>
-                    </tr>
-                    <tr>
-                      <td>41–60 years</td>
-                      <td>110–145</td>
-                      <td>70–90</td>
-                    </tr>
-                    <tr>
-                      <td>61 and older</td>
-                      <td>95–145</td>
-                      <td>70–90</td>
-                    </tr>
-                  </table>
+                  <div>Addition of sugar Reports</div>
+                  <div>
+                    <div>Select Week</div>
+                    <div><TextField size="small"></TextField></div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           <div className="heartRateMainDiv">
@@ -247,9 +337,14 @@ const Dashboard = () => {
                     marginLeft: "10px",
                   }}
                 >
-                  Indication
+                  Description
                 </div>
-                <div className="plusIcon">+</div>
+                <div
+                  className="plusIcon"
+                  onClick={() => setHeartModal(!heartModal)}
+                >
+                  {!heartModal ? "+" : "←"}
+                </div>
               </div>
             </div>
             <div
@@ -262,51 +357,55 @@ const Dashboard = () => {
               <div className="sugarGrapthDiv">
                 <Line data={data1} options={options} />
               </div>
-              <div className="IndicationsDiv">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "15px",
-                  }}
-                >
-                  <CircleIcon style={{ height: "17px", color: "#40DC82" }} />
-                  Normal Rate{" "}
-                  <CircleIcon
+              {!heartModal ? (
+                <div className="IndicationsDiv">
+                  <div
                     style={{
-                      height: "17px",
-                      marginLeft: "25px",
-                      color: "#FF0A00",
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "15px",
                     }}
-                  />
-                  High Rate
+                  >
+                    <CircleIcon style={{ height: "17px", color: "#40DC82" }} />
+                    Normal Rate{" "}
+                    <CircleIcon
+                      style={{
+                        height: "17px",
+                        marginLeft: "25px",
+                        color: "#FF0A00",
+                      }}
+                    />
+                    High Rate
+                  </div>
+                  <div className="staticSugarTit">Heart Rate Ranges</div>
+                  <div>
+                    <table className="tableDatasugars">
+                      <tr>
+                        <th>Age</th>
+                        <th>Average Range</th>
+                        <th>Maximum Range</th>
+                      </tr>
+                      <tr>
+                        <td>19–40 years</td>
+                        <td>90 to 153 bpm</td>
+                        <td>180–201 bpm</td>
+                      </tr>
+                      <tr>
+                        <td>41–60 years</td>
+                        <td>83 to 149 bpm</td>
+                        <td>160–179 bpm</td>
+                      </tr>
+                      <tr>
+                        <td>60 and older</td>
+                        <td>75 to 136 bpm</td>
+                        <td>159 bpm and below</td>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
-                <div className="staticSugarTit">Heart Rate Ranges</div>
-                <div>
-                  <table className="tableDatasugars">
-                    <tr>
-                      <th>Age</th>
-                      <th>Average Range</th>
-                      <th>Maximum Range</th>
-                    </tr>
-                    <tr>
-                      <td>45 years</td>
-                      <td>88 to 149 bpm</td>
-                      <td>175 bpm</td>
-                    </tr>
-                    <tr>
-                      <td>50 years</td>
-                      <td>85to 145 bpm5</td>
-                      <td>170 bpm</td>
-                    </tr>
-                    <tr>
-                      <td>55 years</td>
-                      <td>83 to 140 bpm</td>
-                      <td>165 bpm</td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
+              ) : (
+                <div>Addition of Heart Reports</div>
+              )}
             </div>
           </div>
         </div>
@@ -369,9 +468,15 @@ const Dashboard = () => {
             >
               <img src="/images/medicine.png" />
               Medicine Supplies For Today
-              <div className="plusIcon" style={{cursor:"pointer"}} onClick={()=>navigate('/prescription')} >+</div>
+              <div
+                className="plusIcon"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/prescription")}
+              >
+                +
+              </div>
             </div>
-            <div style={{height:"24vh",overflow:"scroll"}}>
+            <div style={{ height: "24vh", overflow: "scroll" }}>
               {medicineData.length > 0 ? (
                 <table className="MedicineTableMain">
                   <tr>
@@ -395,7 +500,12 @@ const Dashboard = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <img src="/images/empty.svg" height={"180px"} style={{marginBottom:"20px"}} alt="" />
+                  <img
+                    src="/images/empty.svg"
+                    height={"180px"}
+                    style={{ marginBottom: "20px" }}
+                    alt=""
+                  />
                 </div>
               )}
             </div>
@@ -410,47 +520,76 @@ const Dashboard = () => {
               boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
             }}
           >
-             <div
+            <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
-              <img src="/images/diet.png" height={"35px"}  style={{
-                border:"1px solid white",
-                padding:"5px",
-                borderRadius:"8px",
-                boxShadow:"rgba(0, 0, 0, 0.24) 0px 3px 8px"
-              }}/>
-             <div>Dietary Choices For Today</div>
-             <div><button style={{
-              textTransform:"none",
-              padding:"5px",
-              border:"1px solid #AA60C8",
-              borderRadius:"5px",
-              backgroundColor:"#AA60C8",
-              color:"white",
-              cursor:"pointer"
-             }}
-             onClick={()=>navigate('/recommentation')}
-             >View</button></div>
+              <img
+                src="/images/diet.png"
+                height={"35px"}
+                style={{
+                  border: "1px solid white",
+                  padding: "5px",
+                  borderRadius: "8px",
+                  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                }}
+              />
+              <div>Dietary Choices For Today</div>
+              <div>
+                <button
+                  style={{
+                    textTransform: "none",
+                    padding: "5px",
+                    border: "1px solid #AA60C8",
+                    borderRadius: "5px",
+                    backgroundColor: "#AA60C8",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate("/recommentation")}
+                >
+                  View
+                </button>
+              </div>
             </div>
-            <div style={{height:"28vh",overflow:"auto"}}>
-            <table className="FoodsTableMain">
-              <tr>
-                <th>Food</th>
-                <th>Preparation</th>
-                <th>Nutrient</th>
-              </tr>
-              {foodItemsData.map((row) => (
+            <div style={{ height: "28vh", overflow: "auto" }}>
+              <table className="FoodsTableMain">
                 <tr>
-                  <td>{row.food_name}</td>
-                  <td><div style={{width:"100px",height:"45px",overflow:"hidden"}}>{row.preparation}</div></td>
-                  <td><div style={{width:"100px",height:"45px",overflow:"hidden"}}>{row.nutrient}</div></td>
+                  <th>Food</th>
+                  <th>Preparation</th>
+                  <th>Nutrient</th>
                 </tr>
-              ))}
-            </table>
+                {foodItemsData.map((row) => (
+                  <tr>
+                    <td>{row.food_name}</td>
+                    <td>
+                      <div
+                        style={{
+                          width: "100px",
+                          height: "45px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {row.preparation}
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        style={{
+                          width: "100px",
+                          height: "45px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {row.nutrient}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </table>
             </div>
           </div>
         </div>

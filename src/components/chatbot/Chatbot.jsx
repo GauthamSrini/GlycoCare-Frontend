@@ -124,6 +124,8 @@ const Chatbot = () => {
 
 
   return (
+    <div className="chatMain">
+      <div className="chatTit">GlycoBot - Your Personal Assisstant</div>
     <div className="chatBotMainContainer">
       <div>
         <MainContainer style={{ height: "86vh",padding:"10px",borderRadius:"10px"}}>
@@ -145,6 +147,7 @@ const Chatbot = () => {
           </ChatContainer>
         </MainContainer>
       </div>
+    </div>
     </div>
   );
 };

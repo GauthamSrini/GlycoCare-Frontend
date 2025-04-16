@@ -56,11 +56,12 @@
     margin-right: 10px;
     background-color: #AA60C8;
     color: white;
-    padding: 0px 8px 0px 8px;
+    padding: 0px 8px 2px 8px;
     border-radius: 5px;
     display: flex;
     align-items: center;
     font-size: large;
+    cursor: pointer;
 }
 .IndicationsDiv{
     width: 38%;
